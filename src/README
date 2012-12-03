@@ -1,0 +1,67 @@
+pyCOSM instructions
+===================
+
+This wrapper is not endorsed, maintained, supported or approved by cosm.com. Use at your own risk.
+
+Installation:
+-------------
+
+python setup.py install
+
+
+The modules:
+
+PyCOSM.COSM.COSM is the main wrapper. 
+It manages the latest readings from each Datastream (as DataPoints) and will upload them to Cosm.com as required. 
+
+You will need: 
+A cosm.com API key (which means you will have already have registered on the cosm web site.)
+A cosm feed id (or one can be created) to which the API key gives access.
+
+A net connection.
+
+Using pyCOSM:
+=============
+
+Exceptions will be thrown if there is an error.
+
+1) with an existing feed
+
+from pyCOSM.COSM import *
+
+keyid='MYCOSMAPIKEYID1234567890'
+feedid=12345
+
+cosm=COSM(feedid=feedid, apikey=keyid)
+
+cosm.get() # retrieves current settings from COSM for that feed id.
+
+# get the current values for all datastreams
+
+cosm.current_values()
+
+#add a datapoint
+value=23 # room temperature here.
+dp=DataPoint(value) # defaults to current time datatime.datetime.now()
+# dp=DataPoint(value, timestamp) #for a datapoint at a given timestamp.
+
+cosm.addDatapoint(dp, 'datastream id') #if a datastream with id 'datastream id' doesn't exist it will be created.
+
+cosm.update() # sends the latest values for each datastream (since the last update) to cosm.
+
+2) to add a new datastream manually
+
+ds=Datastream('datastream id')
+
+cosm.addDatastream(ds)
+
+3. to create a new datafeed (collection of datastreams)
+
+cosm=COSM(apikey=keyid)
+
+cosm.create()
+
+feedid=cosm.feedid
+
+
+
